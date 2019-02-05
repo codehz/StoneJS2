@@ -1,15 +1,28 @@
-const api = require("..")
-console.log(1);
-api.init();
-console.log(2);
-console.log(api.attach());
-console.log(3);
+const api = require("../index");
 
-console.log(api);
+console.log("init", api.init());
+console.log("attach", api.attach());
 
-// api.core.log(console.log);
-api.core.ping().then(console.log);
-api.command.execute("test", "/help").then(console.log);
-// (async () => {
-//   console.log("config", await api.core.config);
-// })();
+(async () => {
+  console.log("ping!");
+  await api.core.ping();
+  console.log("pong!");
+  console.log("config: " + (await api.core.config));
+  api.chat.recv((err, data) => {
+    console.log("chat: ", data);
+  });
+  api.core.log("*", (err, entry) => {
+    console.log("log: ", entry);
+  });
+  api.core.online_players.onadd(info => {
+    console.log("player added: ", info);
+  });
+  api.core.online_players.onremove(info => {
+    console.log("player removed: ", info);
+  });
+  console.log("query codehz", await api.core.players.get("CodeHz"));
+  console.log("executing /help");
+  console.log(await api.command.execute("sender", "/help"));
+  console.log("executing /id (maybe not exists)");
+  console.log(await api.command.execute("sender", "/id"));
+})();

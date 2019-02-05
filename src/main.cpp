@@ -250,7 +250,7 @@ struct APIGenerator {
           auto &cb = *(Nan::Callback *)privdata;
           v8::Local<v8::Value> argv[] = { Nan::Null(), V8IO<T>::rebuild(identify, data) };
           Nan::Call(cb, 2, argv);
-        }, new Nan::Callback(info[0].template As<v8::Function>()), oss.str().data());
+        }, new Nan::Callback(info[1].template As<v8::Function>()), oss.str().data());
       });
     }
   };
