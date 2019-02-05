@@ -1,6 +1,6 @@
 {
   "name": "stoneapi-js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Stone API for javascript",
   "main": "index.js",
   "repository": {
@@ -19,8 +19,10 @@
     "url": "https://github.com/CodeHz/StoneJS2/issues"
   },
   "homepage": "https://github.com/CodeHz/StoneJS2#readme",
-  "devDependencies": {
-    "cmake-js": "^5.0.1",
+  "dependencies": {
     "nan": "^2.12.1"
+  },
+  "devDependencies": {
+    "cmake-js": "^5.0.1"
   }
 }
