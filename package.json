@@ -1,0 +1,26 @@
+{
+  "name": "stonejs",
+  "version": "0.0.1",
+  "description": "StoneJS API",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CodeHz/StoneJS2.git"
+  },
+  "keywords": [
+    "StoneServer"
+  ],
+  "scripts": {
+    "install": "cmake-js compile"
+  },
+  "author": "CodeHz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CodeHz/StoneJS2/issues"
+  },
+  "homepage": "https://github.com/CodeHz/StoneJS2#readme",
+  "devDependencies": {
+    "cmake-js": "^5.0.1",
+    "nan": "^2.12.1"
+  }
+}
