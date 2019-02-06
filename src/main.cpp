@@ -207,11 +207,11 @@ struct APIGenerator {
           apid_invoke_method(
               [](char const *data, void *privdata) {
                 Nan::HandleScope scope;
-                decltype(resolve) *xresolve = (decltype(resolve) *)privdata;
+                auto xresolve = (decltype(resolve) *)privdata;
                 (*xresolve)(V8IO<R>::write(data));
                 delete xresolve;
               },
-              new (decltype(resolve))(resolve), buffer, V8IO<T>::read(info));
+              new auto(resolve), buffer, V8IO<T>::read(info));
         }));
       });
     }
@@ -224,11 +224,11 @@ struct APIGenerator {
           apid_kv_get(
               [](char const *data, void *privdata) {
                 Nan::HandleScope scope;
-                decltype(resolve) *xresolve = (decltype(resolve) *)privdata;
+                auto xresolve = (decltype(resolve) *)privdata;
                 (*xresolve)(V8IO<T>::write(data));
                 delete xresolve;
               },
-              new (decltype(resolve))(resolve), buffer);
+              new auto(resolve), buffer);
         }));
       });
     }
@@ -272,12 +272,12 @@ struct APIGenerator {
         info.GetReturnValue().Set(makePromise([=, &buffer](auto resolve, auto reject) {
           apid_set_all([](int size, char const **vec, void *privdata) {
             Nan::HandleScope scope;
-            decltype(resolve) *xresolve = (decltype(resolve) *)privdata;
+            auto xresolve = (decltype(resolve) *)privdata;
             auto arr = Nan::New<v8::Array>(size);
             for (int i = 0; i < size; i++) Nan::Set(arr, i, V8IO<T>::write(vec[i]));
             (*xresolve)(arr);
             delete xresolve;
-          }, new (decltype(resolve))(resolve), buffer);
+          }, new auto(resolve), buffer);
         }));
       });
       SetFunc<1>(temp, "onclear", [=, buffer = api::Buffer::buildKeyName(service_name, name + "!clear")] V8CALLBACK {
