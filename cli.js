@@ -4,17 +4,18 @@ const readline = require('readline');
 
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
+  terminal: true
 });
 
-console.log("init", api.init());
-console.log("attach", api.attach());
+api.init();
+api.attach();
 
-rl.prompt();
+rl.prompt(true);
 
 rl.on("line", async line => {
-  console.log((await api.command.execute("cli", line)).trim());
-  rl.prompt();
+  process.stdout.write(await api.command.execute("cli", line));
+  rl.prompt(true);
 }).on('close', () => {
   console.log('Have a great day!');
   process.exit(0);
