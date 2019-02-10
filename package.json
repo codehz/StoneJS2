@@ -1,6 +1,6 @@
 {
   "name": "stoneapi-js",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Stone API for javascript",
   "main": "index.js",
   "repository": {
