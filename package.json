@@ -1,6 +1,6 @@
 {
   "name": "stoneapi-js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Stone API for javascript",
   "main": "index.js",
   "repository": {
@@ -12,6 +12,9 @@
   ],
   "scripts": {
     "install": "cmake-js compile"
+  },
+  "bin": {
+    "stonecli": "./cli.js"
   },
   "author": "CodeHz",
   "license": "MIT",
