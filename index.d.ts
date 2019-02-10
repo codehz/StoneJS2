@@ -1,10 +1,10 @@
-export function init(): number;
-export function init(path: string): number;
-export function init(host: string, port: number): number;
+export function init(): void;
+export function init(path: string): void;
+export function init(host: string, port: number): void;
 
 export type x = ReturnType<typeof init>;
 
-export function attach(): number;
+export function attach(): void;
 
 type ecb<T> =
   | ((error: null, input: T) => void)
