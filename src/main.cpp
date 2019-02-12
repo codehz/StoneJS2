@@ -103,7 +103,7 @@ template <> struct V8IO<std::string> {
   template <typename Info> static api::Buffer read(Info const &info) {
     if (info.Length() < length || !info[0]->IsString()) Nan::ThrowTypeError("wrong argument");
     Nan::Utf8String str(info[0]);
-    return { strdup(*str) };
+    return api::Buffer::copy(*str);
   }
   static auto write(char const *data) { return Nan::New(data).ToLocalChecked(); }
 };
@@ -125,9 +125,7 @@ template <> struct V8IO<api::CommandRequest> {
     if (info.Length() < length || !info[0]->IsString() || !info[1]->IsString()) Nan::ThrowTypeError("wrong argument");
     Nan::Utf8String sender(info[0]);
     Nan::Utf8String command(info[1]);
-    char *buffer;
-    asprintf(&buffer, "%s\n%s", *sender, *command);
-    return { buffer };
+    return api::Buffer::format("%s\n%s", *sender, *command);
   }
 };
 
@@ -137,9 +135,7 @@ template <> struct V8IO<api::NormalMessage> {
     if (info.Length() < length || !info[0]->IsString() || !info[1]->IsString()) Nan::ThrowTypeError("wrong argument");
     Nan::Utf8String sender(info[0]);
     Nan::Utf8String content(info[1]);
-    char *buffer;
-    asprintf(&buffer, "%s\n%s", *sender, *content);
-    return { buffer };
+    return api::Buffer::format("%s\n%s", *sender, *content);
   }
   static auto write(char const *data) {
     auto msg = api::Serializble<api::NormalMessage>::read(data);
@@ -156,9 +152,7 @@ template <> struct V8IO<api::BlacklistOP<false>> {
     if (info.Length() < length || !info[0]->IsString() || !info[1]->IsString()) Nan::ThrowTypeError("wrong argument");
     Nan::Utf8String type(info[0]);
     Nan::Utf8String content(info[1]);
-    char *buffer;
-    asprintf(&buffer, "%s\n%s", *type, *content);
-    return { buffer };
+    return api::Buffer::format("%s\n%s", *type, *content);
   }
 };
 
@@ -169,9 +163,7 @@ template <> struct V8IO<api::BlacklistOP<true>> {
     Nan::Utf8String type(info[0]);
     Nan::Utf8String content(info[1]);
     Nan::Utf8String reason(info[2]);
-    char *buffer;
-    asprintf(&buffer, "%s\n%s\n%s", *type, *content, *reason);
-    return { buffer };
+    return api::Buffer::format("%s\n%s\n%s", *type, *content, *reason);
   }
 };
 
