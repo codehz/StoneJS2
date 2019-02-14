@@ -10,6 +10,7 @@ set(APID_USE_LIBUV ON)
 add_subdirectory(APID EXCLUDE_FROM_ALL)
 add_subdirectory(StoneAPI EXCLUDE_FROM_ALL)
 
+add_library(ae INTERFACE)
 add_library(${PROJECT_NAME} SHARED src/main.cpp)
 target_compile_definitions(${PROJECT_NAME} PUBLIC APID_USE_LIBUV=1)
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
