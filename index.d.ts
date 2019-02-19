@@ -65,6 +65,11 @@ export type BlacklistOPWithReason = {
   reason: string;
 };
 
+export type EventData = {
+  name: string;
+  data: string;
+};
+
 export type InputType<T> = T extends Empty
   ? []
   : T extends NormalMessage
@@ -75,6 +80,8 @@ export type InputType<T> = T extends Empty
   ? [string, string]
   : T extends BlacklistOPWithReason
   ? [string, string, string]
+  : T extends EventData
+  ? [string, string]
   : [T];
 export type OutputType<T> = T extends Empty ? null : T;
 
@@ -101,4 +108,9 @@ export declare const blacklist: {
   add: ProxiedAction<BlacklistOPWithReason>;
   kick: ProxiedAction<BlacklistOPWithReason>;
   remove: ProxiedAction<BlacklistOP>;
+};
+
+export declare const script: {
+  emit: ProxiedAction<EventData>;
+  broadcast: ProxiedPatternBoardcast<EventData>;
 };

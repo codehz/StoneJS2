@@ -3,6 +3,7 @@
 #include <stone-api/Chat.h>
 #include <stone-api/Command.h>
 #include <stone-api/Core.h>
+#include <stone-api/Script.h>
 
 #include <cstdio>
 #include <cstdlib>
@@ -174,6 +175,23 @@ template <> struct V8IO<api::LogEntry> {
     Nan::Set(obj, "tag"_v8, Nan::New(entry.tag).ToLocalChecked());
     Nan::Set(obj, "level"_v8, Nan::New(entry.level));
     Nan::Set(obj, "content"_v8, Nan::New(entry.content).ToLocalChecked());
+    return obj;
+  }
+};
+
+template <> struct V8IO<api::EventData> {
+  static constexpr auto length = 2;
+  template <typename Info> static api::Buffer read(Info const &info) {
+    if (info.Length() < length || !info[0]->IsString() || !info[1]->IsString()) Nan::ThrowTypeError("wrong argument");
+    Nan::Utf8String sender(info[0]);
+    Nan::Utf8String content(info[1]);
+    return api::Buffer::format("%s\n%s", *sender, *content);
+  }
+  static auto rebuild(char const *identify, char const *data) {
+    auto entry = api::EventData::rebuild(identify, data);
+    auto obj   = Nan::New<v8::Object>();
+    Nan::Set(obj, "name"_v8, Nan::New(entry.name).ToLocalChecked());
+    Nan::Set(obj, "data"_v8, Nan::New(entry.data).ToLocalChecked());
     return obj;
   }
 };
@@ -371,6 +389,7 @@ NAN_MODULE_INIT(InitAll) {
   api::ChatService<APIGenerator>().provide(target);
   api::CommandService<APIGenerator>().provide(target);
   api::BlacklistService<APIGenerator>().provide(target);
+  api::ScriptService<APIGenerator>().provide(target);
 }
 
 NODE_MODULE(stonejs2, InitAll)
