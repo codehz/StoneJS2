@@ -201,8 +201,9 @@ struct APIGenerator {
     proxied_action(std::string const &name)
         : Named(name) {}
     void $(v8::Local<v8::Object> &obj, std::string service_name) {
-      SetFunc<V8IO<T>::length>(obj, name,
-                               [=] V8CALLBACK { apid_invoke(NULL, NULL, api::Buffer::buildKeyName(service_name, name), V8IO<T>::read(info)); });
+      SetFunc<V8IO<T>::length>(obj, name, [=, buffer = api::Buffer::buildKeyName(service_name, name)] V8CALLBACK {
+        apid_invoke(NULL, NULL, buffer, V8IO<T>::read(info));
+      });
     }
   };
   template <typename T, typename R> struct proxied_method : api::Named {
