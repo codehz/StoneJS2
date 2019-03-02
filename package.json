@@ -15,7 +15,8 @@
   },
   "bin": {
     "stonecli": "./cli.js",
-    "stoneexec": "./exec.js"
+    "stoneexec": "./exec.js",
+    "stonechat": "./chat.js"
   },
   "author": "CodeHz",
   "license": "MIT",
