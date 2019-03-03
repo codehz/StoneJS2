@@ -315,8 +315,8 @@ struct APIGenerator {
             [](char const *data, void *privdata) {
               Nan::HandleScope scope;
               auto &cb                    = *(Nan::Callback *)privdata;
-              v8::Local<v8::Value> argv[] = { Nan::Null(), V8IO<T>::write(data) };
-              Nan::Call(cb, 2, argv);
+              v8::Local<v8::Value> argv[] = { V8IO<T>::write(data) };
+              Nan::Call(cb, 1, argv);
             },
             new Nan::Callback(info[0].template As<v8::Function>()), buffer);
       });
@@ -326,8 +326,8 @@ struct APIGenerator {
             [](char const *data, void *privdata) {
               Nan::HandleScope scope;
               auto &cb                    = *(Nan::Callback *)privdata;
-              v8::Local<v8::Value> argv[] = { Nan::Null(), V8IO<T>::write(data) };
-              Nan::Call(cb, 2, argv);
+              v8::Local<v8::Value> argv[] = { V8IO<T>::write(data) };
+              Nan::Call(cb, 1, argv);
             },
             new Nan::Callback(info[0].template As<v8::Function>()), buffer);
       });
