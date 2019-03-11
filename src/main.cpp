@@ -99,6 +99,15 @@ template <> struct V8IO<int> {
   static auto write(char const *data) { return Nan::New(atoi(data)); }
 };
 
+template <> struct V8IO<float> {
+  static constexpr auto length = 1;
+  template <typename Info> static api::Buffer read(Info const &info) {
+    if (info.Length() < length || !info[0]->IsNumber()) Nan::ThrowTypeError("wrong argument");
+    return api::Serializble<float>::write(info[0]->NumberValue());
+  }
+  static auto write(char const *data) { return Nan::New(atof(data)); }
+};
+
 template <> struct V8IO<std::string> {
   static constexpr auto length = 1;
   template <typename Info> static api::Buffer read(Info const &info) {
