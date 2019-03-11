@@ -88,6 +88,7 @@ export type OutputType<T> = T extends Empty ? null : T;
 export declare const core: {
   stop: ProxiedAction<Empty>;
   ping: ProxiedMethod<Empty, Empty>;
+  tps: ProxiedMethod<Empty, number>;
   config: ProxiedProperty<string>;
   log: ProxiedPatternBoardcast<LogEntry>;
   players: ProxiedHash<string, PlayerInfo>;
