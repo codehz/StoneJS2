@@ -25,9 +25,9 @@
   },
   "homepage": "https://github.com/CodeHz/StoneJS2#readme",
   "dependencies": {
-    "nan": "^2.12.1"
   },
   "devDependencies": {
-    "cmake-js": "^5.0.1"
+    "cmake-js": "^5.0.1",
+    "nan": "^2.12.1"
   }
 }
