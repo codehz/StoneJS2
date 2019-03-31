@@ -1,6 +1,6 @@
 {
   "name": "stoneapi-js",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Stone API for javascript",
   "main": "index.js",
   "repository": {
@@ -16,7 +16,9 @@
   "bin": {
     "stonecli": "./cli.js",
     "stoneexec": "./exec.js",
-    "stonechat": "./chat.js"
+    "stonechat": "./chat.js",
+    "stoneblacklist": "./blacklist.js",
+    "stonetps": "./gettps.js"
   },
   "author": "CodeHz",
   "license": "MIT",
@@ -25,6 +27,8 @@
   },
   "homepage": "https://github.com/CodeHz/StoneJS2#readme",
   "dependencies": {
+    "@types/yargs": "^12.0.10",
+    "yargs": "^13.2.2"
   },
   "devDependencies": {
     "cmake-js": "^5.0.1",
