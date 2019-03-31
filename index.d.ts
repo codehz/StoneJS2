@@ -109,6 +109,7 @@ export declare const blacklist: {
   add: ProxiedAction<BlacklistOPWithReason>;
   kick: ProxiedAction<BlacklistOPWithReason>;
   remove: ProxiedAction<BlacklistOP>;
+  fetch: ProxiedMethod<Empty, BlacklistOP[]>;
 };
 
 export declare const script: {

@@ -175,6 +175,24 @@ template <> struct V8IO<api::BlacklistOP<true>> {
     Nan::Utf8String reason(info[2]);
     return api::Buffer::format("%s\n%s\n%s", *type, *content, *reason);
   }
+  static auto build(api::BlacklistOP<true> const &input) {
+    auto ret = Nan::New<v8::Object>();
+    Nan::Set(ret, "type"_v8, Nan::New(input.type).ToLocalChecked());
+    Nan::Set(ret, "content"_v8, Nan::New(input.content).ToLocalChecked());
+    Nan::Set(ret, "reason"_v8, Nan::New(input.reason).ToLocalChecked());
+    return ret;
+  }
+};
+
+template <typename T> struct V8IO<std::vector<T>> {
+  static constexpr auto length = 1;
+  static auto write(char const *data) {
+    auto arr   = Nan::New<v8::Array>();
+    auto msg   = api::Serializble<std::vector<T>>::read(data);
+    uint32_t i = 0;
+    for (auto &item : msg) Nan::Set(arr, i++, V8IO<T>::build(item));
+    return arr;
+  }
 };
 
 template <> struct V8IO<api::LogEntry> {
