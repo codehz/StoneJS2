@@ -1,6 +1,0 @@
-[submodule "APID"]
-	path = APID
-	url = https://github.com/codehz/APID
-[submodule "StoneAPI"]
-	path = StoneAPI
-	url = https://github.com/codehz/StoneAPI
