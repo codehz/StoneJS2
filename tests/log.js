@@ -6,7 +6,7 @@ const server = new StoneServer(
 
 server.ready.then(async () => {
   console.log("connected!");
-  await server.ping();
-  console.log("pong!");
-  server.disconnect();
+  for await (const entry of server.log) {
+    console.log(entry);
+  }
 });

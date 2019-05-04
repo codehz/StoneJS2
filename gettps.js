@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-const api = require("./index");
+const StoneServer = require("./index");
 
-api.init();
-api.attach();
+const server = new StoneServer(
+  process.env.API_ENDPOINT || "ws+unix://data/api.socket"
+);
 
-api.core.tps().then(tps => {
-  console.log(tps);
-  process.exit(0);
+server.ready.then(async () => {
+  console.log(await server.tps);
+  server.disconnect();
 });

@@ -1,9 +1,13 @@
 #!/usr/bin/env node
-const api = require("./index");
+const StoneServer = require("./index");
 
-api.init();
-api.attach();
+const server = new StoneServer(
+  process.env.API_ENDPOINT || "ws+unix://data/api.socket"
+);
 
-api.chat.recv((err, msg) => {
-  console.log(msg);
+server.ready.then(async () => {
+  for await (item of server.chat) {
+    console.log(item);
+  }
+  console.log("!!");
 });

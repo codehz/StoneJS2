@@ -1,40 +1,7 @@
-export function init(): void;
-export function init(path: string): void;
-export function init(host: string, port: number): void;
+PlayerInfo;
 
-export type x = ReturnType<typeof init>;
-
-export function attach(): void;
-
-type ecb<T> =
-  | ((error: null, input: T) => void)
-  | ((error: string, input: null) => void);
-
-export type ProxiedAction<T> = (...input: InputType<T>) => void;
-export type ProxiedMethod<T, R> = (
-  ...input: InputType<T>
-) => Promise<OutputType<R>>;
-export type ProxiedProperty<T> = Promise<OutputType<T>>;
-export type ProxiedBoardcast<T> = (callback: ecb<OutputType<T>>) => void;
-export type ProxiedPatternBoardcast<T> = (
-  filter: string,
-  callback: ecb<OutputType<T>>
-) => void;
-export type ProxiedSet<T> = {
-  items: Promise<OutputType<T>[]>;
-  onclear: (cb: (n: null) => void) => void;
-  onadd: (cb: (out: OutputType<T>) => void) => void;
-  onremove: (cb: (out: OutputType<T>) => void) => void;
-};
-export type ProxiedHash<K, V> = {
-  get: (...key: InputType<K>) => Promise<OutputType<V>>;
-};
-
-export type Empty = void;
-
-export type LogEntry = {
-  tag: string;
-  level: 0 | 1 | 2 | 3 | 4;
+export type NormalMessage = {
+  sender: string;
   content: string;
 };
 
@@ -44,13 +11,9 @@ export type PlayerInfo = {
   xuid: string;
 };
 
-export type NormalMessage = {
-  sender: string;
-  content: string;
-};
-
-export type CommandRequest = {
-  sender: string;
+export type LogEntry = {
+  tag: string;
+  level: 0 | 1 | 2 | 3 | 4;
   content: string;
 };
 
@@ -65,54 +28,43 @@ export type BlacklistOPWithReason = {
   reason: string;
 };
 
+export type CommandRequest = {
+  sender: string;
+  content: string;
+};
+
 export type EventData = {
   name: string;
   data: string;
 };
 
-export type InputType<T> = T extends Empty
-  ? []
-  : T extends NormalMessage
-  ? [string, string]
-  : T extends CommandRequest
-  ? [string, string]
-  : T extends BlacklistOP
-  ? [string, string]
-  : T extends BlacklistOPWithReason
-  ? [string, string, string]
-  : T extends EventData
-  ? [string, string]
-  : [T];
-export type OutputType<T> = T extends Empty ? null : T;
+class StoneServer {
+  constructor(address: string);
+  ready: Promise<void>;
+  disconnect(): void;
 
-export declare const core: {
-  stop: ProxiedAction<Empty>;
-  ping: ProxiedMethod<Empty, Empty>;
-  tps: ProxiedMethod<Empty, number>;
-  config: ProxiedProperty<string>;
-  log: ProxiedPatternBoardcast<LogEntry>;
-  players: ProxiedHash<string, PlayerInfo>;
-  online_players: ProxiedSet<PlayerInfo>;
-};
+  stop(): Promise<void>;
+  ping(): Promise<void>;
+  get tps(): Promise<number>;
+  get config(): Promise<string>;
+  get online_players(): Promise<PlayerInfo[]>;
+  get log(): AsyncIterable<LogEntry>;
+  get player_join(): AsyncIterable<LogEntry>;
+  get player_left(): AsyncIterable<LogEntry>;
 
-export declare const chat: {
-  send: ProxiedAction<NormalMessage>;
-  recv: ProxiedBoardcast<NormalMessage>;
-  raw: ProxiedAction<string>;
-};
+  broadcast_message(msg: NormalMessage): Promise<void>;
+  broadcast_raw(raw: string): Promise<void>;
+  get chat(): AsyncIterable<NormalMessage>;
 
-export declare const command: {
-  execute: ProxiedMethod<CommandRequest, string>;
-};
+  blacklist_add(op: BlacklistOPWithReason): Promise<void>;
+  blacklist_remove(op: BlacklistOP): Promise<void>;
+  kick(op: BlacklistOPWithReason): Promise<void>;
+  get blacklist(): Promise<BlacklistOPWithReason[]>;
 
-export declare const blacklist: {
-  add: ProxiedAction<BlacklistOPWithReason>;
-  kick: ProxiedAction<BlacklistOPWithReason>;
-  remove: ProxiedAction<BlacklistOP>;
-  fetch: ProxiedMethod<Empty, BlacklistOP[]>;
-};
+  execute(req: CommandRequest): Promise<string>;
 
-export declare const script: {
-  emit: ProxiedAction<EventData>;
-  broadcast: ProxiedPatternBoardcast<EventData>;
-};
+  script_emit(data: EventData): Promise<void>;
+  get script_event(): Promise<EventData>;
+}
+
+export = StoneServer;

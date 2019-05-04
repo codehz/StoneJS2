@@ -1,6 +1,6 @@
 {
   "name": "stoneapi-js",
-  "version": "0.2.1",
+  "version": "1.0.0-alpha.1",
   "description": "Stone API for javascript",
   "main": "index.js",
   "repository": {
@@ -26,12 +26,9 @@
     "url": "https://github.com/CodeHz/StoneJS2/issues"
   },
   "homepage": "https://github.com/CodeHz/StoneJS2#readme",
+  "lock": false,
   "dependencies": {
-    "@types/yargs": "^12.0.10",
+    "rpc-websockets": "^4.3.5",
     "yargs": "^13.2.2"
-  },
-  "devDependencies": {
-    "cmake-js": "^5.0.1",
-    "nan": "^2.12.1"
   }
 }

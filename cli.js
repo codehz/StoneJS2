@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-const api = require("./index");
-const readline = require('readline');
+const StoneServer = require("./index");
+const readline = require("readline");
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -8,15 +8,21 @@ const rl = readline.createInterface({
   terminal: true
 });
 
-api.init();
-api.attach();
+const server = new StoneServer(
+  process.env.API_ENDPOINT || "ws+unix://data/api.socket"
+);
 
-rl.prompt(true);
+const executor = process.env.SENDER || "cli";
 
-rl.on("line", async line => {
-  process.stdout.write(await api.command.execute("cli", line));
+server.ready.then(async () => {
   rl.prompt(true);
-}).on('close', () => {
-  console.log('Have a great day!');
-  process.exit(0);
+  rl.on("line", async line => {
+    process.stdout.write(
+      await server.execute({ sender: executor, content: line })
+    );
+    rl.prompt(true);
+  }).on("close", () => {
+    console.log("Have a great day!");
+    server.disconnect()
+  });
 });

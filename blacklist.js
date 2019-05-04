@@ -1,61 +1,63 @@
 #!/usr/bin/env node
-const api = require("./index");
+const StoneServer = require("./index");
 const yargs = require("yargs");
 
-api.init();
-api.attach();
+const server = new StoneServer(
+  process.env.API_ENDPOINT || "ws+unix://data/api.socket"
+);
 
-yargs
-  .usage("$0 <cmd> [args]")
-  .command(
-    "add",
-    "Add target to blacklist",
-    y =>
-      y
-        .choices("type", ["name", "uuid", "xuid"])
-        .option("target", { type: "string" })
-        .option("reason", { type: "string" })
-        .demandOption(["type", "target", "reason"]),
-    ({ type, target, reason }) => {
-      api.blacklist.add(type, target, reason);
-      setImmediate(() => process.exit(0));
-    }
-  )
-  .command(
-    "remove",
-    "Remove target from blacklist",
-    y =>
-      y
-        .choices("type", ["name", "uuid", "xuid"])
-        .option("target", { type: "string" })
-        .demandOption(["type", "target"]),
-    ({ type, target }) => {
-      api.blacklist.remove(type, target);
-      setImmediate(() => process.exit(0));
-    }
-  )
-  .command(
-    "kick",
-    "Kick a target",
-    y =>
-      y
-        .choices("type", ["name", "uuid", "xuid"])
-        .option("target", { type: "string" })
-        .option("reason", { type: "string" })
-        .demandOption(["type", "target", "reason"]),
-    ({ type, target, reason }) => {
-      api.blacklist.kick(type, target, reason);
-      setImmediate(() => process.exit(0));
-    }
-  )
-  .command(
-    "fetch",
-    "Fetch blacklist",
-    y => y,
-    async () => {
-      console.log(await api.blacklist.fetch());
-      process.exit(0);
-    }
-  )
-  .help().argv;
-
+server.ready.then(async () => {
+  yargs
+    .usage("$0 <cmd> [args]")
+    .command(
+      "add",
+      "Add target to blacklist",
+      y =>
+        y
+          .choices("type", ["name", "uuid", "xuid"])
+          .option("target", { type: "string" })
+          .option("reason", { type: "string" })
+          .demandOption(["type", "target", "reason"]),
+      async ({ type, target, reason }) => {
+        await server.blacklist_add({ [type]: target, reason });
+        server.disconnect();
+      }
+    )
+    .command(
+      "remove",
+      "Remove target from blacklist",
+      y =>
+        y
+          .choices("type", ["name", "uuid", "xuid"])
+          .option("target", { type: "string" })
+          .demandOption(["type", "target"]),
+      async ({ type, target }) => {
+        await server.blacklist_add({ [type]: target });
+        server.disconnect();
+      }
+    )
+    .command(
+      "kick",
+      "Kick a target",
+      y =>
+        y
+          .choices("type", ["name", "uuid", "xuid"])
+          .option("target", { type: "string" })
+          .option("reason", { type: "string" })
+          .demandOption(["type", "target", "reason"]),
+      async ({ type, target, reason }) => {
+        await server.kick({ [type]: target, reason });
+        server.disconnect();
+      }
+    )
+    .command(
+      "fetch",
+      "Fetch blacklist",
+      y => y,
+      async () => {
+        console.log(await server.blacklist);
+        server.disconnect();
+      }
+    )
+    .help().argv;
+});

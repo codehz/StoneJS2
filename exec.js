@@ -1,14 +1,21 @@
 #!/usr/bin/env node
-const api = require("./index");
+const StoneServer = require("./index");
 
-api.init();
-api.attach();
+const server = new StoneServer(
+  process.env.API_ENDPOINT || "ws+unix://data/api.socket"
+);
+
+const executor = process.env.SENDER || "cli";
 
 const args = process.argv;
 
 args.shift();
 args.shift();
-api.command.execute("server", args.join(" ")).then(result => {
-  console.log(result.trim());
-  process.exit(0);
-});
+server.ready
+  .then(async () => {
+    console.log(
+      await server.execute({ sender: executor, content: args.join(" ") })
+    );
+  })
+  .catch(console.warn)
+  .finally(() => server.disconnect());
