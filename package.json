@@ -10,9 +10,6 @@
   "keywords": [
     "StoneServer"
   ],
-  "scripts": {
-    "install": "cmake-js compile"
-  },
   "bin": {
     "stonecli": "./cli.js",
     "stoneexec": "./exec.js",
