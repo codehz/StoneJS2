@@ -8,8 +8,8 @@ function genfun(clazz, ns, name, altname = name) {
 }
 
 function gennotify(clazz, ns, name, altname = name) {
-  clazz.prototype[altname] = function() {
-    return this.socket.notify(`${ns}.${name}`, arguments);
+  clazz.prototype[altname] = function(arg = {}) {
+    return this.socket.notify(`${ns}.${name}`, arg);
   };
 }
 
